@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Game.gd" type="Script" id=1]
+[ext_resource path="res://FallingBlock.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://InvisibleWall.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Restarter.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 219.168, 10 )
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 1 )
+falling_block_scn = ExtResource( 2 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 101.369, 290.651 )
+
+[node name="FallingBlockContainer" type="Node2D" parent="."]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ScoreLabel" type="Label" parent="."]
+margin_left = 9.72647
+margin_top = 5.4036
+margin_right = 49.7265
+margin_bottom = 19.4036
+text = "Score: 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameOverLabel" type="Label" parent="."]
+modulate = Color( 1, 0, 0, 1 )
+margin_left = 22.1367
+margin_top = 132.516
+margin_right = 99.1367
+margin_bottom = 146.516
+rect_scale = Vector2( 2, 2 )
+text = "Game Over!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GameOverLabel"]
+margin_left = 29.6599
+margin_top = 13.37
+margin_right = 145.66
+margin_bottom = 27.37
+rect_scale = Vector2( 0.4, 0.4 )
+text = "Press 'R' to restart"
+
+[node name="BlockCatcherArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlockCatcherArea2D"]
+position = Vector2( 119.42, 316.651 )
+shape = SubResource( 1 )
+
+[node name="InvisibleWall" parent="." instance=ExtResource( 4 )]
+position = Vector2( -11.0257, 292.272 )
+
+[node name="InvisibleWall2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 211.062, 291.732 )
+
+[node name="SpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="Restarter" type="Node" parent="."]
+pause_mode = 2
+script = ExtResource( 5 )
+[connection signal="body_entered" from="BlockCatcherArea2D" to="." method="_on_BlockCatcherArea2D_body_entered"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
